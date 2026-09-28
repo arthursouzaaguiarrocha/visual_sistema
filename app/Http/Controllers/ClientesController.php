@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\StoreUpdateRequest;
 use App\Models\Cliente;
 use Exception;
 use Illuminate\Http\Request;
-use Illuminate\Validation\Rule;
 
 class ClientesController extends Controller
 {
@@ -31,27 +31,9 @@ class ClientesController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request->all());
+        //dd($request->all());
         try{
-            $cliente = $request->validate([
-                'tipo' => ["string", Rule::in('Pessoa Fisica', 'Pessoa Juridica'), 'required'],
-                'nome' => "string|required",
-                'nome_fantasia' => "string|nullable",
-                'cpf_cnpj' => "string|nullable|unique",
-                'rg_ie' => "string|nullable",
-                'email' => 'string|nullable|email:rfc,dns',
-                'telefone' => 'string|required',
-                'whatsapp' => 'string|nullable',
-                'cep' => 'string|nullable',
-                'endereco' => 'string|nullable',
-                'numero' => 'string|nullable',
-                'complemento' => 'string|nullable',
-                'bairro' => 'string|nullable',
-                'cidade' => 'string|nullable',
-                'estado' => 'string|nullable|max:2',
-                'observacoes' => 'text|nullable',
-                'ativo' => 'boolean'
-            ]);
+            $cliente = $request->validate([StoreUpdateRequest::clientes()]);
             Cliente::create($cliente);  
             return redirect()->route('clientes.index')->with('success', 'CLIENTE CADASTRADO COM SUCESSO');   
         }catch(Exception $e){
@@ -59,20 +41,10 @@ class ClientesController extends Controller
         }
     }
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Cliente $cliente)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
     public function edit(Cliente $cliente)
     {
-        //
+        $dados = $cliente->findOrFail();
+        return view('cliente.edit',compact($dados));
     }
 
     /**
@@ -80,7 +52,13 @@ class ClientesController extends Controller
      */
     public function update(Request $request, Cliente $cliente)
     {
-        //
+        try{
+            $cliente = $request->validate([StoreUpdateRequest::clientes()]);
+            Cliente::create($cliente);  
+            return redirect()->route('clientes.index')->with('success', 'CLIENTE ATUALIZADO COM SUCESSO');   
+        }catch(Exception $e){
+            return redirect()->route('clientes.create')->with('error', "ERRO AO ATUALIZAR CLIENTE" . $e->getMessage());
+        }
     }
 
     /**
@@ -88,6 +66,7 @@ class ClientesController extends Controller
      */
     public function destroy(Cliente $cliente)
     {
-        //
+        $cliente->delete();
+        return redirect()->route('clientes.index')->with('success', 'CLIENTE DELETADO COM SUCESSO');  
     }
 }
