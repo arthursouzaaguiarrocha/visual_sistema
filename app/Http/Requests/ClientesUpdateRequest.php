@@ -6,14 +6,14 @@ use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
 use Illuminate\Validation\Rule;
 
-class StoreUpdateRequest extends FormRequest
+class ClientesUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -21,13 +21,17 @@ class StoreUpdateRequest extends FormRequest
      *
      * @return array<string, ValidationRule|array<mixed>|string>
      */
-    public function clientes(): array
+    public function rules(): array
     {
         return [
             'tipo' => ["string", Rule::in('Pessoa Fisica', 'Pessoa Juridica'), 'required'],
             'nome' => "string|required",
             'nome_fantasia' => "string|nullable",
-            'cpf_cnpj' => "string|nullable|unique",
+            'cpf_cnpj' => [
+                'nullable',
+                'string',
+                Rule::unique('clientes', 'cpf_cnpj')->ignore($this->route('cliente')),
+            ],
             'rg_ie' => "string|nullable",
             'email' => 'string|nullable|email:rfc,dns',
             'telefone' => 'string|required',

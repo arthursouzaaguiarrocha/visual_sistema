@@ -1,4 +1,3 @@
-```blade
 <form action="{{ route('clientes.store') }}" method="POST">
     @csrf
 
@@ -269,4 +268,4 @@
     </button>
 
 </form>
-```
+

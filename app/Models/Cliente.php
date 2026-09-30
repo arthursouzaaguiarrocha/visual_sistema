@@ -3,7 +3,6 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use phpDocumentor\Reflection\Types\Boolean;
 
 class Cliente extends Model
 {

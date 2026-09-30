@@ -1,8 +1,8 @@
 <?php
 
-use App\Http\Controllers\ClientesController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\ClientesController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,6 +19,6 @@ Route::middleware('auth')->group(function () {
 
     //clientes
     Route::resource('/clientes', ClientesController::class);
-
 });
+
 require __DIR__.'/auth.php';

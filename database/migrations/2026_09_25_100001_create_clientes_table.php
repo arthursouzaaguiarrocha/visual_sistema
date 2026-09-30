@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('clientes', function (Blueprint $table) {
             $table->id();
-            $table->enum('tipo_pessoa', ['Pessoa Fisica', 'Pessoa Juridica'])->default('Pessoa Fisica');
+            $table->enum('tipo', ['Pessoa Fisica', 'Pessoa Juridica'])->default('Pessoa Fisica');
             $table->string('nome'); // nome completo ou razão social
             $table->string('nome_fantasia')->nullable();
             $table->string('cpf_cnpj')->nullable()->unique();
