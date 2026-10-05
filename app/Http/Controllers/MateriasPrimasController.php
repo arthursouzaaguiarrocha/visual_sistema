@@ -2,23 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Models\Fornecedor;
 use App\Models\MateriaPrima;
+use App\Http\Requests\MateriasPrimasUpdateRequest;
 
 class MateriasPrimasController extends Controller
 {
     public function index()
     {
-        $materias = MateriaPrima::all();
+        $materias = MateriaPrima::with('fornecedor')->get();
         return view('materias_primas.index', compact('materias'));
     }
 
     public function create()
     {
-        return view('materias_primas.create');
+        $fornecedores = Fornecedor::orderBy('nome')->get();
+        return view('materias_primas.create', compact('fornecedores'));
     }
 
-    public function store(Request $request)
+    public function store(MateriasPrimasUpdateRequest $request)
     {
         try {
             MateriaPrima::create($request->validated());
@@ -30,10 +32,11 @@ class MateriasPrimasController extends Controller
 
     public function edit(MateriaPrima $materia)
     {
-        return view('materias_primas.edit', compact('materia'));
+        $fornecedores = Fornecedor::orderBy('nome')->get();
+        return view('materias_primas.edit', compact('materia', 'fornecedores'));
     }
 
-    public function update(Request $request, MateriaPrima $materia)
+    public function update(MateriasPrimasUpdateRequest $request, MateriaPrima $materia)
     {
         try {
             $materia->update($request->validated());

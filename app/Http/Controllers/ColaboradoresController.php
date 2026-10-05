@@ -2,38 +2,41 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-use App\Models\Colaborador;
+use App\Models\Colaboradore;
+use App\Models\User;
+use App\Http\Requests\ColaboradoresUpdateRequest;
 
 class ColaboradoresController extends Controller
 {
     public function index()
     { 
-        $colaboradores = Colaborador::all();
+        $colaboradores = Colaboradore::all();
         return view('colaboradores.index', compact('colaboradores'));
     }
 
     public function create()
     {
-        return view('colaboradores.create');
+        $users = User::orderBy('name')->get();
+        return view('colaboradores.create', compact('users'));
     }
 
-    public function store(Request $request)
+    public function store(ColaboradoresUpdateRequest $request)
     {
         try{
-            Colaborador::create($request->validated());
+            Colaboradore::create($request->validated());
             return redirect()->route('colaboradores.index')->with('success', 'COLABORADOR CADASTRADO COM SUCESSO');
         }catch (\Exception $e) {
             return redirect()->route('colaboradores.create')->withInput()->with('error', 'ERRO AO CADASTRAR COLABORADOR: ' . $e->getMessage());
         }
     }
 
-    public function edit(Colaborador $colaborador)
+    public function edit(Colaboradore $colaborador)
     {
-        return view('colaboradores.edit', compact('colaborador'));
+        $users = User::orderBy('name')->get();
+        return view('colaboradores.edit', compact('colaborador', 'users'));
     }
 
-    public function update(Request $request, Colaborador $colaborador)
+    public function update(ColaboradoresUpdateRequest $request, Colaboradore $colaborador)
     {
         try{
             $colaborador->update($request->validated());
@@ -43,7 +46,7 @@ class ColaboradoresController extends Controller
         }
     }
 
-    public function destroy(Colaborador $colaborador)
+    public function destroy(Colaboradore $colaborador)
     {
         $colaborador->delete();
         return redirect()->route('colaboradores.index')->with('success', 'COLABORADOR DELETADO COM SUCESSO');

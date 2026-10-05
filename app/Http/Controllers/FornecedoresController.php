@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Fornecedor;
+use App\Http\Requests\FornecedoresUpdateRequest;
 
 class FornecedoresController extends Controller
 {
@@ -18,7 +18,7 @@ class FornecedoresController extends Controller
         return view('fornecedores.create');
     }
 
-    public function store(Request $request)
+    public function store(FornecedoresUpdateRequest $request)
     {
         try{
             Fornecedor::create($request->validated());
@@ -33,7 +33,7 @@ class FornecedoresController extends Controller
         return view('fornecedores.edit', compact('fornecedor'));
     }
 
-    public function update(Request $request, Fornecedor $fornecedor)
+    public function update(FornecedoresUpdateRequest $request, Fornecedor $fornecedor)
     {
         try{
             $fornecedor->update($request->validated());

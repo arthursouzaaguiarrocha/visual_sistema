@@ -27,11 +27,7 @@ class ClientesUpdateRequest extends FormRequest
             'tipo' => ["string", Rule::in('Pessoa Fisica', 'Pessoa Juridica'), 'required'],
             'nome' => "string|required",
             'nome_fantasia' => "string|nullable",
-            'cpf_cnpj' => [
-                'nullable',
-                'string',
-                Rule::unique('clientes', 'cpf_cnpj')->ignore($this->route('cliente')),
-            ],
+            'cpf_cnpj' => ['nullable','string',Rule::unique('clientes', 'cpf_cnpj')->ignore($this->route('cliente')),],
             'rg_ie' => "string|nullable",
             'email' => 'string|nullable|email:rfc,dns',
             'telefone' => 'string|required',
@@ -43,7 +39,7 @@ class ClientesUpdateRequest extends FormRequest
             'bairro' => 'string|nullable',
             'cidade' => 'string|nullable',
             'estado' => 'string|nullable|max:2',
-            'observacoes' => 'text|nullable',
+            'observacoes' => 'string|nullable',
             'ativo' => 'boolean'
         ];
     }

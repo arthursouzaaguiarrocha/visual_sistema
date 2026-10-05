@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class FornecedoresUpdateRequest extends FormRequest
 {
@@ -12,7 +13,7 @@ class FornecedoresUpdateRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -24,7 +25,7 @@ class FornecedoresUpdateRequest extends FormRequest
     {
         return [
             'nome' => ['required', 'string', 'max:255'],
-            'cnpj_cpf' => ['nullable', 'string', 'max:20', 'unique:fornecedores,cnpj_cpf,' . $this->route('fornecedor')->id],
+            'cnpj_cpf' => ['nullable', 'string', 'max:20', Rule::unique('fornecedores', 'cnpj_cpf')->ignore($this->route('fornecedor'))],
             'contato_nome' => ['nullable', 'string', 'max:255'],
             'telefone' => ['nullable', 'string', 'max:20'],
             'email' => ['nullable', 'email', 'max:255'],

@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class ColaboradoresUpdateRequest extends FormRequest
 {
@@ -25,7 +26,7 @@ class ColaboradoresUpdateRequest extends FormRequest
         return [
             'user_id' => 'nullable|exists:users,id',
             'nome' => 'required|string|max:255',
-            'cpf' => 'nullable|string|max:14|unique:colaboradores,cpf',
+            'cpf' => ['nullable','string','max:14', Rule::unique('colaboradores', 'cpf')->ignore($this->route('colaborador'))],
             'cargo' => 'nullable|string|max:255',
             'setor' => 'nullable|string|max:255',
             'salario' => 'nullable|numeric|min:0',
